@@ -1,0 +1,14 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+rtmapi = "~=0.7"
+httplib2 = "*"
+colorama = "*"
+
+[requires]
+python_version = "2.7"
