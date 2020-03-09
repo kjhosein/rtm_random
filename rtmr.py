@@ -3,6 +3,8 @@
 import os
 import sys
 import random
+import logging
+import argparse
 from datetime import datetime
 import webbrowser
 from rtmapi import Rtm
@@ -30,6 +32,23 @@ COLORAMA_STYLE = getattr(Style, STYLE)
 
 if __name__ == '__main__':
 
+    # Check the arguments passed to this script
+    parser = argparse.ArgumentParser(description='Get a random To DO from RTM!', prefix_chars='-/')
+    parser.add_argument('--loglevel', dest='loglevel', metavar='',
+                        choices=['debug'], type=str.lower,
+                        help="[optional] Set the log level (e.g. debug, etc.)")
+    args = parser.parse_args()
+
+    # Set loglevel if --loglevel argument is used, otherwise set to INFO:
+    # if args.loglevel is not None:
+    if args.loglevel is None:
+        logging_num_level = 20
+    else:
+        logging_num_level = getattr(logging, args.loglevel.upper())
+
+    LOG_FORMAT = "\n %(levelname)s: %(message)s"
+    logging.basicConfig(level=logging_num_level, format=LOG_FORMAT)
+
     user_home_dir = os.path.expanduser("~")
     rtm_auth_file = os.path.join(user_home_dir, '.rtm_auth_token')
     if os.path.exists(rtm_auth_file):
@@ -52,7 +71,7 @@ if __name__ == '__main__':
         api.retrieve_token(frob)
         # print out new token, should be used to initialize the Rtm object next time
         # (a real application should store the token somewhere)
-        print "New token: %s" % api.token
+        logging.debug("New token: %s" % api.token)
 
         # user_home_dir = expanduser("~")
         # rtm_auth_file = os.path.join(user_home_dir, '.rtm_auth_token')
@@ -60,20 +79,17 @@ if __name__ == '__main__':
         f.write(api.token)
         f.close()
 
-
     # get all open tasks, see http://www.rememberthemilk.com/services/api/methods/rtm.tasks.getList.rtm
     result = api.rtm.tasks.getList(filter="status:incomplete list:Current priority:1 ")
     list_of_tasks = []
 
     for tasklist in result.tasks:
         for taskseries in tasklist:
-            # print taskseries.task.due, taskseries.name
-            # list_of_tasks.append([taskseries.name, taskseries.priority, taskseries.id])
             list_of_tasks.append(taskseries.name)
     random_task_name = random.choice(list_of_tasks)
     print '# of tasks is: ', len(list_of_tasks)
 
-    print "DEBUG: random task name is: ", random_task_name  # DEBUG
+    logging.debug("Random task name is: " + random_task_name)
     print
 
     # Get only the specific task by task_id
@@ -83,8 +99,7 @@ if __name__ == '__main__':
         for taskseries in tasklist:
             print 'Task Name: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.name, Style.RESET_ALL
             print 'Priority: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.task.priority, Style.RESET_ALL
-            # print 'Due: \t\t'
-            print '\n DEBUG: type of taskseries.task.due is ...', type(taskseries.task.due), '\n'
+            logging.debug('The type of taskseries.task.due is ...' + str(type(taskseries.task.due)))
             if taskseries.task.due == '':
                 print 'Due: \t\t-'
             else:
