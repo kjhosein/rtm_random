@@ -3,11 +3,14 @@
 import os
 import sys
 import random
+from datetime import datetime
 import webbrowser
 from rtmapi import Rtm
 from colorama import init
-init()  # allows colorama to work under Windows
 from colorama import Fore, Back, Style
+init()  # allows colorama to work under Windows
+strptime = datetime.strptime
+strftime = datetime.strftime
 
 api_key = "98cfa8464ef953428bc3a8cce7f6f155"
 shared_secret = "9da203dc006ffcc3"
@@ -86,10 +89,15 @@ if __name__ == '__main__':
 
     # Get only the specific task by task_id
     result = ""
-    result = api.rtm.tasks.getList(filter="name:%s" % random_task_name)
     for tasklist in result.tasks:
-        for taskseries in tasklist:
-            # print taskseries.task.due, taskseries.name, taskseries.priority, tasklist
+            print 'Priority: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.task.priority, Style.RESET_ALL
+            # print 'Due: \t\t'
+            print '\n DEBUG: type of taskseries.task.due is ...', type(taskseries.task.due), '\n'
+            if taskseries.task.due == '':
+                print 'Due: \t\t <no due date>'
+            else:
+                print 'Due: \t\t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, strftime(strptime(taskseries.task.due, "%Y-%m-%dT%H:%M:%SZ"), "%d %b %Y"), Style.RESET_ALL
+            # print 'Notes: ', taskseries.tags[0]
             print 'Task Name: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.name, Style.RESET_ALL
             print 'Priority: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.priority, Style.RESET_ALL
             print 'Due: \t\t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.due, Style.RESET_ALL
