@@ -29,11 +29,7 @@ COLORAMA_STYLE = getattr(Style, STYLE)
 
 
 if __name__ == '__main__':
-    # call the program as `listtasks.py api_key shared_secret [optional: token]`
-    # get those parameters from http://www.rememberthemilk.com/services/api/keys.rtm
-    # api_key, shared_secret = sys.argv[1:3]
-    # token = sys.argv[3] if len(sys.argv) >= 4 else None
-    
+
     user_home_dir = os.path.expanduser("~")
     rtm_auth_file = os.path.join(user_home_dir, '.rtm_auth_token')
     if os.path.exists(rtm_auth_file):
@@ -65,40 +61,33 @@ if __name__ == '__main__':
         f.close()
 
 
-# get all open tasks, see http://www.rememberthemilk.com/services/api/methods/rtm.tasks.getList.rtm
+    # get all open tasks, see http://www.rememberthemilk.com/services/api/methods/rtm.tasks.getList.rtm
     result = api.rtm.tasks.getList(filter="status:incomplete list:Current priority:1 ")
-    # print "result is a var of type: ", result
-    # print "result is a var of type: ", type(result)
-    # print "result.tasks is a var of type: ", result.tasks
-    # print "\n"
-    # list_of_tasks = list()
     list_of_tasks = []
 
     for tasklist in result.tasks:
         for taskseries in tasklist:
-    #         print taskseries.task.due, taskseries.name
+            # print taskseries.task.due, taskseries.name
             # list_of_tasks.append([taskseries.name, taskseries.priority, taskseries.id])
             list_of_tasks.append(taskseries.name)
     random_task_name = random.choice(list_of_tasks)
-    
-    # print Style.BRIGHT, Fore.MAGENTA
-    # print random.choice(list_of_tasks)
-    # print Style.RESET_ALL
+    print '# of tasks is: ', len(list_of_tasks)
+
     print "DEBUG: random task name is: ", random_task_name  # DEBUG
-    print 
+    print
 
     # Get only the specific task by task_id
     result = ""
+    result = api.rtm.tasks.getList(filter="name:%s" % random_task_name)
     for tasklist in result.tasks:
+        for taskseries in tasklist:
+            print 'Task Name: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.name, Style.RESET_ALL
             print 'Priority: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.task.priority, Style.RESET_ALL
             # print 'Due: \t\t'
             print '\n DEBUG: type of taskseries.task.due is ...', type(taskseries.task.due), '\n'
             if taskseries.task.due == '':
-                print 'Due: \t\t <no due date>'
+                print 'Due: \t\t-'
             else:
-                print 'Due: \t\t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, strftime(strptime(taskseries.task.due, "%Y-%m-%dT%H:%M:%SZ"), "%d %b %Y"), Style.RESET_ALL
-            # print 'Notes: ', taskseries.tags[0]
-            print 'Task Name: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.name, Style.RESET_ALL
-            print 'Priority: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.priority, Style.RESET_ALL
-            print 'Due: \t\t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.due, Style.RESET_ALL
+                formatted_date = strftime(strptime(taskseries.task.due, "%Y-%m-%dT%H:%M:%SZ"), "%d %b %Y")
+                print 'Due: \t\t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, formatted_date, Style.RESET_ALL
     print
