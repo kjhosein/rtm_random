@@ -11,7 +11,6 @@ Do you have way too many things to do and don't know where to start? Use this sc
 	* rtmapi
 	* httplib2
 	* colorama
-	* progress
 
 ### Installing & Running
 
@@ -34,3 +33,7 @@ Please add your suggestions, bugs you've found or send us pull requests via this
 ## License
 
 This project is licensed under the Mozilla Public License 2.0 (MPL-2.0)  - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This utility uses the [Remember The Milk API](https://www.rememberthemilk.com/services/api/) but is not endorsed or certified by Remember The Milk.
