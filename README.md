@@ -33,4 +33,4 @@ Please add your suggestions, bugs you've found or send us pull requests via this
 
 ## License
 
-This project is licensed under the Mozilla Public License 2.0 (MPL-2.0)  - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the Mozilla Public License 2.0 (MPL-2.0)  - see the [LICENSE](LICENSE) file for details.
