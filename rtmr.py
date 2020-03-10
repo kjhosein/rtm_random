@@ -11,6 +11,8 @@ from rtmapi import Rtm
 from colorama import init
 from colorama import Fore, Back, Style
 init()  # allows colorama to work under Windows
+# The next 2 lines are workarounds for a bug in the datetime module.
+# reference: https://stackoverflow.com/a/43043036/389946
 strptime = datetime.strptime
 strftime = datetime.strftime
 
@@ -30,14 +32,13 @@ COLORAMA_BG = getattr(Back, BG)
 COLORAMA_STYLE = getattr(Style, STYLE)
 
 
-if __name__ == '__main__':
-
+def main(raw_args=None):
     # Check the arguments passed to this script
-    parser = argparse.ArgumentParser(description='Get a random To DO from RTM!', prefix_chars='-/')
+    parser = argparse.ArgumentParser(description='Get a random TO DO from RTM!', prefix_chars='-/')
     parser.add_argument('--loglevel', dest='loglevel', metavar='',
                         choices=['debug'], type=str.lower,
                         help="[optional] Set the log level (e.g. debug, etc.)")
-    args = parser.parse_args()
+    args = parser.parse_args(raw_args)
 
     # Set loglevel if --loglevel argument is used, otherwise set to INFO:
     # if args.loglevel is not None:
@@ -48,6 +49,8 @@ if __name__ == '__main__':
 
     LOG_FORMAT = "\n %(levelname)s: %(message)s"
     logging.basicConfig(level=logging_num_level, format=LOG_FORMAT)
+
+    logging.debug("Args passed in are: " + str(args))
 
     user_home_dir = os.path.expanduser("~")
     rtm_auth_file = os.path.join(user_home_dir, '.rtm_auth_token')
@@ -90,7 +93,6 @@ if __name__ == '__main__':
     print '# of tasks is: ', len(list_of_tasks)
 
     logging.debug("Random task name is: " + random_task_name)
-    print
 
     # Get only the specific task by task_id
     result = ""
@@ -106,3 +108,7 @@ if __name__ == '__main__':
                 formatted_date = strftime(strptime(taskseries.task.due, "%Y-%m-%dT%H:%M:%SZ"), "%d %b %Y")
                 print 'Due: \t\t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, formatted_date, Style.RESET_ALL
     print
+
+
+if __name__ == '__main__':
+    main()
