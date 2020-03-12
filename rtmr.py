@@ -40,6 +40,8 @@ def main(raw_args=None):
     parser.add_argument('--loglevel', dest='loglevel', metavar='',
                         choices=['debug'], type=str.lower,
                         help="[optional] Set the log level (e.g. debug, etc.)")
+    parser.add_argument('-l', '--list', metavar='', 
+                        help="[optional] Select a specific list to search in. Use quotes if your list name has spaces in it.")             
     args = parser.parse_args(raw_args)
 
     # Set loglevel if --loglevel argument is used, otherwise set to INFO
@@ -52,6 +54,8 @@ def main(raw_args=None):
     logging.basicConfig(level=logging_num_level, format=LOG_FORMAT)
 
     logging.debug("Args passed in are: " + str(args))
+
+    rtm_list = args.list
 
     # Look for a token in ~/.rtm_auth_token first
     user_home_dir = os.path.expanduser("~")
@@ -86,7 +90,10 @@ def main(raw_args=None):
 
     # Get all incomplete tasks based on the constructed filter.
     # RTM filters: https://www.rememberthemilk.com/help/?ctx=basics.search.advanced
-    filter = "status:incomplete"
+    filter = 'status:incomplete'
+    if rtm_list:
+        filter = filter + ' list:"%s"' % rtm_list
+    logging.debug("filter is now: " + filter)
     result = api.rtm.tasks.getList(filter="%s" % filter)
     list_of_tasks = []
 

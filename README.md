@@ -2,9 +2,7 @@
 
 Do you have way too many things to do and don't know where to start? Use this script to randomly pick an item from your RTM account!
 
-## Getting Started
-
-### Prerequisites
+## Prerequisites
 
 * Python 2.7.x
 * Python modules:
@@ -12,15 +10,24 @@ Do you have way too many things to do and don't know where to start? Use this sc
 	* httplib2
 	* colorama
 
-### Installing & Running
+## Installing
 
-Clone this repo and run `rtmr.py`. e.g.:
+Clone this repo to your local computer.
+
+## Usage
+
+Run `rtmr.py`. e.g.:
 
 ```./rtmr.py```
 
 or perhaps:
 
 ```python2.7 rtmr.py```
+
+### Options
+
+* `-l`/`--list` - specify an RTM list to search within. Note that if your list has spaces in it, you must quote it. i.e. "Home Tasks" or 'Grocery List'
+
 
 ## Contributing
 
