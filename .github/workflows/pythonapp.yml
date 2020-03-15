@@ -5,9 +5,9 @@ name: Python application
 
 on:
   push:
-    branches: [ master ]
+    branches: [ workflow-dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ workflow-dev ]
 
 jobs:
   build:
@@ -25,6 +25,7 @@ jobs:
     - name: Install dependencies
       run: |
         pipenv install --dev
+        python -m pip install --upgrade pip
     - name: Lint with flake8
       run: |
         pip --no-python-version-warning install flake8
