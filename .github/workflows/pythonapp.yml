@@ -21,10 +21,10 @@ jobs:
       with:
         python-version: 2.7
     - name: Install pipenv
-        uses: dschep/install-pipenv-action@v1
+      uses: dschep/install-pipenv-action@v1
     - name: Install dependencies
-        run: |
-          pipenv install --dev
+      run: |
+        pipenv install --dev
     - name: Lint with flake8
       run: |
         pip install flake8
