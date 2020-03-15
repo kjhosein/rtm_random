@@ -41,7 +41,9 @@ def main(raw_args=None):
                         choices=['debug'], type=str.lower,
                         help="[optional] Set the log level (e.g. debug, etc.)")
     parser.add_argument('-l', '--list', metavar='', 
-                        help="[optional] Select a specific list to search in. Use quotes if your list name has spaces in it.")             
+                        help="[optional] Select a specific list to search in. Use quotes if your list name has spaces in it.")            
+    parser.add_argument('-t', '--tag', metavar='', 
+                        help="[optional] Select a specific tag to add to your search filter.")   
     args = parser.parse_args(raw_args)
 
     # Set loglevel if --loglevel argument is used, otherwise set to INFO
@@ -56,6 +58,7 @@ def main(raw_args=None):
     logging.debug("Args passed in are: " + str(args))
 
     rtm_list = args.list
+    rtm_tag = args.tag
 
     # Look for a token in ~/.rtm_auth_token first
     user_home_dir = os.path.expanduser("~")
@@ -93,6 +96,8 @@ def main(raw_args=None):
     filter = 'status:incomplete'
     if rtm_list:
         filter = filter + ' list:"%s"' % rtm_list
+    if rtm_tag:
+        filter = filter + ' tag:"%s"' % rtm_tag
     logging.debug("filter is now: " + filter)
     result = api.rtm.tasks.getList(filter="%s" % filter)
     list_of_tasks = []
