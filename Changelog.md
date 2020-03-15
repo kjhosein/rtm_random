@@ -7,3 +7,7 @@ MVP (Minimum Viable Product). This (mostly) works. It does not yet have any filt
 **v0.2**
 
 Added the `-l`/`--list` flag to search within a specific list.
+
+**v0.3**
+
+Added the `-t`/`--tag` flag to search within a specific tag.
