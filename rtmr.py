@@ -93,7 +93,7 @@ def main(raw_args=None):
 
     # Get all incomplete tasks based on the constructed filter.
     # RTM filters: https://www.rememberthemilk.com/help/?ctx=basics.search.advanced
-    filter = 'status:incomplete'
+    filter = 'status:incomplete isSubtask:false'
     if rtm_list:
         filter = filter + ' list:"%s"' % rtm_list
     if rtm_tag:
@@ -111,27 +111,36 @@ def main(raw_args=None):
     random_task_name = random.choice(list_of_tasks)
     logging.debug("Random task name is: " + random_task_name)
 
-    # Get only the specific task by task_id along with its Priority & Due Date and print them out.
+    # Use the random task's name to retrieve its full info
     result = ""
-    result = api.rtm.tasks.getList(filter="name:%s" % random_task_name)
-    for tasklist in result.tasks:
-        for taskseries in tasklist:
-            print "\nTask Name: \t", COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.name, Style.RESET_ALL
+    result = api.rtm.tasks.getList(filter='name:"%s"' % random_task_name)
+    logging.debug("results.tasks has a type of: " + str(type(result.tasks)))
 
-            if "N" in taskseries.task.priority:
-                print 'Priority: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, 'None', Style.RESET_ALL
-            else:
-                print 'Priority: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, taskseries.task.priority, Style.RESET_ALL
+    # Use the RtmAPI iterators to drill down to the taskseries & task info.
+    # To better understand what's going on here, you'll need to read the
+    # RtmAPI docs as well as how Remember The Milk's API returns queries.
+    first_tasklist = iter(result.tasks).next()
+    logging.debug("tasklist has a type of: " + str(type(tasklist)))
 
-            if taskseries.task.due == '':
-                print 'Due: \t\t -'
-            else:
-                formatted_date = strftime(strptime(taskseries.task.due, "%Y-%m-%dT%H:%M:%SZ"), "%d %b %Y")
-                print 'Due: \t\t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, formatted_date, Style.RESET_ALL
+    first_taskseries = iter(first_tasklist).next()
+    logging.debug("first_taskseries  type is: " + str(type(first_taskseries)))
+
+    print "\nTask Name: \t", COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, first_taskseries.name, Style.RESET_ALL
+
+    if "N" in first_taskseries.task.priority:
+        print 'Priority: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, 'None', Style.RESET_ALL
+    else:
+        print 'Priority: \t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, first_taskseries.task.priority, Style.RESET_ALL
+
+    if first_taskseries.task.due == '':
+        print 'Due: \t\t -'
+    else:
+        formatted_date = strftime(strptime(first_taskseries.task.due, "%Y-%m-%dT%H:%M:%SZ"), "%d %b %Y")
+        print 'Due: \t\t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, formatted_date, Style.RESET_ALL
 
     # As a bonus, print the # of tasks in the user's search filter
-    print "\n The total # of tasks with your filter of '%s': " % filter, COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, \
-        len(list_of_tasks), Style.RESET_ALL, "\n"
+    print "\n PS: The total # of tasks with your search filter is: ", COLORAMA_STYLE, \
+        COLORAMA_BG, COLORAMA_FG, len(list_of_tasks), Style.RESET_ALL, "\n"
 
 
 if __name__ == '__main__':
