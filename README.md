@@ -54,6 +54,12 @@ Find all priority 1 tasks that are tagged as _financial_:
 
 *Note* that specifying multiple search filter flags `AND`s them together (not `OR`).
 
+## Bonus Script - Randomize a List of Ordered Numbers, 1 to N.
+
+Many days, I have To Dos that crop up outside of what's in RTM. I tend to write these down. To fight the overwhelm, I number the items, then randomize the list using the `shuffle.py` script. 
+
+For example, if I have 4 items (1, 2, 3, 4 ), after shuffling the list, it may become [3, 1, 4, 2].
+
 ## Contributing
 
 Please add your suggestions, bugs you've found or send us pull requests via this GitHub repo!
