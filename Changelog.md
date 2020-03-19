@@ -20,3 +20,9 @@ FEATURES
 BUG FIXES
 
 * Improve code to be more resilient to searches that return results with similar names. 
+
+**v0.5 (18 Mar 2020)**
+
+FEATURES
+
+* Added the `-p`/`--priority` flag to search for tasks a specific priority.

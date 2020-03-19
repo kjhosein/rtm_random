@@ -28,6 +28,7 @@ or perhaps:
 
 * `-l` / `--list` - specify an RTM list to search within. Note that if your list has spaces in it, you must quote it. i.e. "Home Tasks" or 'Grocery List'
 * `-t` / `--tag` - specify an RTM tag to search within or add to your search filter. 
+* `-p` / `--priority` - specify an RTM priority to search within or add to your search filter. 
 
 ### Examples
 
@@ -46,6 +47,10 @@ Find a random task in your _financial_ list:
 Find a random task in your _Home Stuff_ list that is also tagged with the _financial_ tag:
 
 `./rtmr.py -l 'House Stuff' -t financial`
+
+Find all priority 1 tasks that are tagged as _financial_:
+
+`./rtmr.py -p 1 -t financial`
 
 *Note* that specifying multiple search filter flags `AND`s them together (not `OR`).
 
