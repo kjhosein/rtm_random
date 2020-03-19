@@ -4,7 +4,7 @@ Do you have way too many things to do and don't know where to start? Use this sc
 
 ## Prerequisites
 
-* Python 2.7.x
+* Python 2.7.x - primarily due to the RtmAPI module being built with this version.
 * Python modules:
 	* rtmapi
 	* httplib2
@@ -63,6 +63,8 @@ For example, if I have 4 items (1, 2, 3, 4 ), after shuffling the list, it may b
 ## Contributing
 
 Please add your suggestions, bugs you've found or send us pull requests via this GitHub repo!
+
+The point of this tool is to make your life a little bit more manageable by removing one more decision - what to do/where to start? So that means it should *not* make it more complicated by having/adding so many features that you need to do/learn 1 more thing! As much as I like powerful software, I've fought the urge to add every single feature that has occurred to me. 
 
 ## Authors
 
