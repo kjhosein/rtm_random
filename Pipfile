@@ -9,6 +9,7 @@ verify_ssl = true
 rtmapi = "~=0.7"
 httplib2 = "*"
 colorama = "*"
+progress = "*"
 
 [requires]
 python_version = "2.7"
