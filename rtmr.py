@@ -10,6 +10,9 @@ import webbrowser
 from rtmapi import Rtm
 from colorama import init
 from colorama import Fore, Back, Style
+from time import sleep
+from progress.spinner import Spinner
+
 
 init()  # allows colorama to work under Windows
 
@@ -131,6 +134,8 @@ def main(raw_args=None):
     first_taskseries = iter(first_tasklist).next()
     logging.debug("first_taskseries  type is: " + str(type(first_taskseries)))
 
+    spinner()  # Cosmetic only ;-)
+
     print "\nTask Name: \t", COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, first_taskseries.name, Style.RESET_ALL
 
     if "N" in first_taskseries.task.priority:
@@ -147,6 +152,26 @@ def main(raw_args=None):
     # As a bonus, print the # of tasks in the user's search filter
     print "\n PS: The total # of tasks with your search filter is: ", COLORAMA_STYLE, \
         COLORAMA_BG, COLORAMA_FG, len(list_of_tasks), Style.RESET_ALL, "\n"
+
+
+def spinner():
+    # Just a little bit of flash. Has no true functionality, apart from 
+    # possibly some psychological lift.
+    print
+
+    spinner = Spinner("Fetching tasks ")
+    for i in range(16):
+        spinner.next()
+        sleep(0.1)
+    spinner.finish()
+    
+    spinner = Spinner("\rPicking a random task ")
+    for i in range(16):
+        spinner.next()
+        sleep(0.1)
+    spinner.finish()
+
+    print "Here you go!"
 
 
 if __name__ == '__main__':
