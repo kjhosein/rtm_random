@@ -39,7 +39,8 @@ COLORAMA_STYLE = getattr(Style, STYLE)
 
 def main(raw_args=None):
     # Check the arguments passed to this script
-    parser = argparse.ArgumentParser(description='Get a random TO DO from Remember the Milk!', prefix_chars='-/')
+    parser = argparse.ArgumentParser(description='Get a random TO DO from Remember the Milk!', prefix_chars='-/',
+                                     epilog='Note that multiple flags are ANDed together making your search more specific. See docs for more info.')
     parser.add_argument('--loglevel', dest='loglevel', metavar='',
                         choices=['debug'], type=str.lower,
                         help="[optional] Set the log level (e.g. debug, etc.)")
