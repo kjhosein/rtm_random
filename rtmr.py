@@ -155,7 +155,7 @@ def main(raw_args=None):
 
 
 def spinner():
-    # Just a little bit of flash. Has no true functionality, apart from 
+    # Just a little bit of flash. Has no true functionality, apart from
     # possibly some psychological lift.
     print
 
@@ -164,7 +164,7 @@ def spinner():
         spinner.next()
         sleep(0.1)
     spinner.finish()
-    
+
     spinner = Spinner("\rPicking a random task ")
     for i in range(16):
         spinner.next()
