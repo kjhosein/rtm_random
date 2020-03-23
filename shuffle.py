@@ -35,8 +35,9 @@ if platform == "darwin":
         for i in range(0, len(list_of_items), chunk_size)
     ]
 
-    # print(chunked_data)
-    print "Hit any key to continue hearing the sequence."
+    answer = raw_input("Hit any key to continue hearing the sequence or Q/q to quit.")
+    if answer[0:1] == 'q' or answer[0:1] == 'Q':
+        quit()
 
     for chunk in chunked_data:
         cmd = ('say {x}')
@@ -44,3 +45,6 @@ if platform == "darwin":
         call(cmd, shell=True)
         cmd = 'read -n 1 -s'
         call(cmd, shell=True)
+
+    cmd = ('say "End of list."')
+    call(cmd, shell=True)
