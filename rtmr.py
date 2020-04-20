@@ -110,12 +110,19 @@ def main(raw_args=None):
 
     logging.debug("filter is now: " + filter)
     result = api.rtm.tasks.getList(filter="%s" % filter)
+    
     list_of_tasks = []
 
     # Use the RtmAPI tasks iter to put the filtered set of tasks into a list
     for tasklist in result.tasks:
         for taskseries in tasklist:
             list_of_tasks.append(taskseries.name)
+
+    # If the total # of retrieved tasks is zero, print mesg & exit
+    if not list_of_tasks:
+        print "\n\tSorry, but your filter didn't find any to dos."
+        print "\tPerhaps re-check your spelling and try again.\n"
+        exit(0)
 
     # Pick out a random task name
     random_task_name = random.choice(list_of_tasks)
@@ -151,7 +158,7 @@ def main(raw_args=None):
         print 'Due: \t\t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, formatted_date, Style.RESET_ALL
 
     # As a bonus, print the # of tasks in the user's search filter
-    print "\n PS: The total # of tasks with your search filter is: ", COLORAMA_STYLE, \
+    print "\nPS: The total # of tasks with your search filter is: ", COLORAMA_STYLE, \
         COLORAMA_BG, COLORAMA_FG, len(list_of_tasks), Style.RESET_ALL, "\n"
 
 
