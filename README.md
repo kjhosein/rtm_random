@@ -5,10 +5,11 @@ Do you have way too many things to do and don't know where to start? Use this sc
 ## Prerequisites
 
 * Python 2.7.x - primarily due to the RtmAPI module being built with this version.
-* Python modules:
+* Python modules (`pip install` these):
 	* rtmapi
 	* httplib2
 	* colorama
+	* progress
 
 ## Installing
 
