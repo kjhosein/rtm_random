@@ -41,7 +41,7 @@ Find a random task in your _Home Stuff_ list:
 
 `./rtmr.py -l 'House Stuff'`
 
-Find a random task in your _financial_ list:
+Find a random task that is tagged as _financial_:
 
 `./rtmr.py -t financial`
 
