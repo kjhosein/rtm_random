@@ -50,6 +50,8 @@ def main(raw_args=None):
                         help="[optional] Select a specific tag to add to your search filter.")
     parser.add_argument('-p', '--priority', metavar='', choices=['1', '2', '3', 'N'],
                         help="[optional] Select a specific priority to add to your search filter.")
+    parser.add_argument('-e', '--estimate', metavar='',
+                        help="[optional] Select the maximum time estimate of the task (in hours). (Only returns tasks with time estimates.)")
     args = parser.parse_args(raw_args)
 
     # Set loglevel if --loglevel argument is used, otherwise set to INFO
@@ -66,6 +68,25 @@ def main(raw_args=None):
     rtm_list = args.list
     rtm_tag = args.tag
     rtm_priority = args.priority
+    rtm_estimate = args.estimate
+    logging.debug("rtm_estimate is %s: " % rtm_estimate)
+    logging.debug("rtm_estimate is a variable of type: ")
+    logging.debug(type(rtm_estimate))
+
+    # If an estimate (-e) is input, then calculate the time in hours:
+    if rtm_estimate:
+        # if estimate is given in minutes (i.e. has an 'm' in the input), convert to hours
+        if "m" in rtm_estimate:
+            rtm_estimate_minutes = float(''.join([char for char in rtm_estimate if char.isdigit() or char == "."]))
+            rtm_estimate_minutes = rtm_estimate_minutes / 60
+            logging.debug("time estimate in hours (converted from minutes) is %.2f" % rtm_estimate_minutes)
+            rtm_estimate = str(rtm_estimate_minutes)
+
+        # if estimate has an 'h', assume hours and strip the non-digit characters. keep dot (.)
+        if "h" in rtm_estimate or "H" in rtm_estimate:
+            rtm_estimate_hours = float(''.join([char for char in rtm_estimate if char.isdigit() or char == "."]))
+            logging.debug("time estimate in hours is %.2f" % rtm_estimate_hours)
+            rtm_estimate = str(rtm_estimate_hours)
 
     # Look for a token in ~/.rtm_auth_token first
     user_home_dir = os.path.expanduser("~")
@@ -101,12 +122,16 @@ def main(raw_args=None):
     # Get all incomplete tasks based on the constructed filter.
     # RTM filters: https://www.rememberthemilk.com/help/?ctx=basics.search.advanced
     filter = 'status:incomplete isSubtask:false'
+    if rtm_estimate:
+        filter = 'status:incomplete isSubtask:false hasTimeEstimate:true'
     if rtm_list:
         filter = filter + ' list:"%s"' % rtm_list
     if rtm_tag:
         filter = filter + ' tag:"%s"' % rtm_tag
     if rtm_priority:
         filter = filter + ' priority:"%s"' % rtm_priority
+    if rtm_estimate:
+        filter = filter + ' timeEstimate:"< %s hour"' % rtm_estimate
 
     logging.debug("filter is now: " + filter)
     result = api.rtm.tasks.getList(filter="%s" % filter)
@@ -156,6 +181,12 @@ def main(raw_args=None):
     else:
         formatted_date = strftime(strptime(first_taskseries.task.due, "%Y-%m-%dT%H:%M:%SZ"), "%d %b %Y")
         print 'Due: \t\t', COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, formatted_date, Style.RESET_ALL
+
+    printable_time_estimate = first_taskseries.task.estimate[2:]  # Remove the 'PT' at the start of the output
+    printable_time_estimate = printable_time_estimate.replace("M", " minutes")
+    printable_time_estimate = printable_time_estimate.replace("H", " hour/s")
+
+    print "Time Estimate: \t", COLORAMA_STYLE, COLORAMA_BG, COLORAMA_FG, printable_time_estimate, Style.RESET_ALL
 
     # As a bonus, print the # of tasks in the user's search filter
     print "\nPS: The total # of tasks with your search filter is: ", COLORAMA_STYLE, \
