@@ -6,3 +6,6 @@ sandbox
 
 ### Terraform ### 
 .terraform/
+
+### Python
+venv/
